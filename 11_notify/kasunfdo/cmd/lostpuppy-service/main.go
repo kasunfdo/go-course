@@ -24,7 +24,7 @@ func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
-	lostAPIHandler.WireLostServiceRoutes(router)
+	lostAPIHandler.WireRoutes(router)
 
 	serverAddr := fmt.Sprintf(":%d", *port)
 	log.Fatal(http.ListenAndServe(serverAddr, router))

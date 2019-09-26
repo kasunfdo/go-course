@@ -166,7 +166,10 @@ Code : `200 OK`
 Content example :
 
 ```json
-    "puppy updated"
+{
+    "Status" : 200,
+    "Msg"    : "puppy updated"
+}
 ```
 
 #### Delete puppy <a name="delete"></a>
@@ -184,7 +187,10 @@ Code : `200 OK`
 Content example :
 
 ```json
-    "puppy deleted"
+{
+    "Status" : 200,
+    "Msg"    : "puppy deleted"
+}
 ```
 
 ## API - Lost Puppy Service <a name="api-lps"></a>
@@ -210,7 +216,7 @@ Code : `201 Created`
 Content example :
 
 ```json
-"Status: 201"
+{ "Status" : 201 }
 ```
 
 ##### Response for odd IDs (Success):
@@ -220,5 +226,5 @@ Code : `500 Internal Server Error`
 Content example :
 
 ```json
-"Status: 500"
+{ "Status" : 500 }
 ```

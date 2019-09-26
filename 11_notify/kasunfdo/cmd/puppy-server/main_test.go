@@ -27,7 +27,6 @@ func TestParseArgsLong(t *testing.T) {
 	assert.NotNil(t, config.dataFile)
 	assert.Equal(t, 1234, config.port)
 	assert.Equal(t, "sync", config.storeType)
-	assert.Equal(t, "sync", config.storeType)
 	assert.Equal(t, "lostSvc_end-point", config.lostSvcURL)
 }
 

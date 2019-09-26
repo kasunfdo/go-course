@@ -20,8 +20,7 @@ func getTestRouter(t *testing.T) *chi.Mux {
 	require.NoError(t, err)
 
 	router := chi.NewRouter()
-	apiHandler := *puppy.NewAPIHandler(storer, "")
-	apiHandler.WireRoutes(router)
+	puppy.NewAPIHandler(storer, "").WireRoutes(router)
 
 	return router
 }
@@ -83,7 +82,7 @@ func TestAPI(t *testing.T) {
 			url:        "/api/puppy/",
 			payload:    []byte(`{"id":1,"breed": "Rottweiler", "colour": "Brown", "value": 2100}`),
 			httpCode:   http.StatusOK,
-			expected:   "\"puppy updated\"\n"},
+			expected:   "{\"Status\":200,\"Msg\":\"puppy updated\"}\n"},
 		{
 			name:       "PUT puppy negative val",
 			httpMethod: "PUT",
@@ -111,7 +110,7 @@ func TestAPI(t *testing.T) {
 			url:        "/api/puppy/1",
 			payload:    nil,
 			httpCode:   http.StatusOK,
-			expected:   "\"puppy deleted\"\n"},
+			expected:   "{\"Status\":200,\"Msg\":\"puppy deleted\"}\n"},
 		{
 			name:       "DELETE puppy invalid id",
 			httpMethod: "DELETE",

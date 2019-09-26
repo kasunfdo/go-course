@@ -21,6 +21,6 @@ type Storer interface {
 	DeletePuppy(id uint64) error
 }
 
-type Payload struct {
+type LostPuppyRequest struct {
 	ID uint64 `json:"id"`
 }

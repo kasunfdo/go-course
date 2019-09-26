@@ -1,7 +1,6 @@
 package puppy
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -19,15 +18,15 @@ func NewLostAPIHandler() *LostAPIHandler {
 
 // HandlePostLostPuppy handles http request to lost puppy service.
 func (a *LostAPIHandler) HandlePostLostPuppy(w http.ResponseWriter, r *http.Request) {
-	var payload Payload
-	if err := render.DecodeJSON(r.Body, &payload); err != nil {
+	var lostPuppyRequest LostPuppyRequest
+	if err := render.DecodeJSON(r.Body, &lostPuppyRequest); err != nil {
 		sendErrorResponse(w, http.StatusBadRequest, ErrorEf(ErrInvalid, err, ""))
 		return
 	}
 
 	var responseStatus int
 
-	switch payload.ID % 2 {
+	switch lostPuppyRequest.ID % 2 {
 	case 0:
 		responseStatus = http.StatusCreated
 	case 1:
@@ -37,10 +36,10 @@ func (a *LostAPIHandler) HandlePostLostPuppy(w http.ResponseWriter, r *http.Requ
 	time.Sleep(2 * time.Second)
 
 	w.WriteHeader(responseStatus)
-	render.JSON(w, r, fmt.Sprintf("Status: %d", responseStatus))
+	render.JSON(w, r, struct{ Status int }{responseStatus})
 }
 
-// WireLostServiceRoutes route requests to corresponding REST API handler method.
-func (a *LostAPIHandler) WireLostServiceRoutes(r chi.Router) {
+// WireRoutes route requests to corresponding REST API handler method.
+func (a *LostAPIHandler) WireRoutes(r chi.Router) {
 	r.Post("/api/lostpuppy/", a.HandlePostLostPuppy)
 }

@@ -71,7 +71,14 @@ func (a *APIHandler) HandlePutPuppy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	render.Status(r, http.StatusOK)
-	render.JSON(w, r, "puppy updated")
+	render.JSON(w, r,
+		struct {
+			Status int
+			Msg    string
+		}{
+			http.StatusOK,
+			"puppy updated",
+		})
 }
 
 // HandleDeletePuppy deletes puppy in store by id.
@@ -90,7 +97,14 @@ func (a *APIHandler) HandleDeletePuppy(w http.ResponseWriter, r *http.Request) {
 	go LostPuppyEPCall(id, a.lostSvcURL)
 
 	render.Status(r, http.StatusOK)
-	render.JSON(w, r, "puppy deleted")
+	render.JSON(w, r,
+		struct {
+			Status int
+			Msg    string
+		}{
+			http.StatusOK,
+			"puppy deleted",
+		})
 }
 
 // WireRoutes route requests to corresponding REST API handler method.
@@ -103,7 +117,7 @@ func (a *APIHandler) WireRoutes(r chi.Router) {
 
 // LostPuppyEPCall sends an async http request to lost puppy service
 func LostPuppyEPCall(puppyID uint64, lostSvcURL string) {
-	payload := Payload{ID: puppyID}
+	payload := LostPuppyRequest{ID: puppyID}
 	data, _ := json.Marshal(payload)
 	resp, err := http.Post(lostSvcURL, "application/json", bytes.NewBuffer(data)) // #nosec
 

@@ -28,21 +28,25 @@ func TestLostPuppyAPI(t *testing.T) {
 			url:        "/api/lostpuppy/",
 			payload:    []byte(`{"id": 2}`),
 			httpCode:   http.StatusCreated,
-			expected:   "\"Status: 201\"\n"},
+			expected:   "{\"Status\":201}\n",
+		},
 		{
 			name:       "POST odd id",
 			httpMethod: "POST",
 			url:        "/api/lostpuppy/",
 			payload:    []byte(`{"id": 1}`),
 			httpCode:   http.StatusInternalServerError,
-			expected:   "\"Status: 500\"\n"},
+			expected:   "{\"Status\":500}\n",
+		},
 		{
 			name:       "POST invalid request",
 			httpMethod: "POST",
 			url:        "/api/lostpuppy/",
 			payload:    []byte(`{"id": "foo"}`),
 			httpCode:   http.StatusBadRequest,
-			expected:   "invalid input: \n\tjson: cannot unmarshal string into Go struct field Payload.id of type uint64\n"},
+			expected: "invalid input: \n\tjson: " +
+				"cannot unmarshal string into Go struct field LostPuppyRequest.id of type uint64\n",
+		},
 	}
 
 	for _, test := range tests {
@@ -52,8 +56,7 @@ func TestLostPuppyAPI(t *testing.T) {
 			require.NoError(t, err)
 
 			router := chi.NewRouter()
-			lostAPIHandler := *puppy.NewLostAPIHandler()
-			lostAPIHandler.WireLostServiceRoutes(router)
+			puppy.NewLostAPIHandler().WireRoutes(router)
 			recorder := httptest.NewRecorder()
 			router.ServeHTTP(recorder, request)
 			response := recorder.Result()
